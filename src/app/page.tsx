@@ -64,51 +64,56 @@ export default function Home() {
 
   return (
     <div className="space-y-8">
-      {/* Header */}
-      <div className="text-center space-y-3">
-        <h1 className="text-4xl font-bold">Dataset Marketplace</h1>
-        <p className="text-xl text-gray-600">
-          Discover and trade datasets on the 0G blockchain
+      {/* Hero Header */}
+      <div className="bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 rounded-2xl p-12 text-white space-y-3 shadow-2xl">
+        <h1 className="text-5xl font-black tracking-tight">
+          Dataset Marketplace
+        </h1>
+        <p className="text-xl text-white/90 font-semibold">
+          Discover, trade, and monetize datasets on the 0G blockchain
         </p>
       </div>
 
       {/* CTA */}
       {wallet.isConnected && (
-        <div className="bg-gradient-to-r from-primary to-secondary text-white rounded-lg p-6 text-center">
-          <h2 className="text-xl font-bold mb-3">Ready to share your data?</h2>
+        <div className="bg-gradient-to-r from-emerald-500 to-cyan-500 text-white rounded-xl p-8 text-center shadow-xl hover:shadow-2xl transition-shadow">
+          <h2 className="text-2xl font-bold mb-4">Ready to share your data?</h2>
           <Link
             href="/upload"
-            className="inline-block px-6 py-2 bg-white text-primary rounded-lg font-medium hover:bg-opacity-90"
+            className="inline-block px-8 py-3 bg-white text-emerald-600 rounded-lg font-bold hover:bg-gray-50 transition-all hover:scale-105 shadow-lg"
           >
-            Upload Dataset
+            📤 Upload Dataset Now
           </Link>
         </div>
       )}
 
-      {/* Filters */}
+      {/* Filters Section */}
       <div className="space-y-4">
-        {/* Search */}
-        <div className="relative">
-          <Search className="absolute left-3 top-3 text-gray-400" size={20} />
+        {/* Search Bar */}
+        <div className="relative group">
+          <Search
+            className="absolute left-4 top-4 text-purple-400 group-hover:text-purple-600 transition"
+            size={22}
+          />
           <input
             type="text"
-            placeholder="Search datasets..."
+            placeholder="Search datasets by name..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+            className="w-full pl-12 pr-4 py-3 border-2 border-purple-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white shadow-md hover:shadow-lg transition"
           />
         </div>
 
         {/* Categories */}
-        <div className="flex gap-2 overflow-x-auto pb-2">
+        <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
           {["All", ...CATEGORIES].map((cat) => (
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
-              className={`px-4 py-2 rounded-full whitespace-nowrap transition ${
+              className={`px-5 py-2 rounded-full whitespace-nowrap font-semibold transition-all duration-300 shadow-sm hover:shadow-md ${
                 selectedCategory === cat
-                  ? "bg-primary text-white"
-                  : "bg-white border border-gray-300 text-gray-700 hover:border-primary"
+                  ? "bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg"
+                  : "bg-white border-2 border-purple-200 text-gray-700 hover:border-purple-500 hover:text-purple-600"
               }`}
             >
               {cat}
@@ -119,18 +124,25 @@ export default function Home() {
 
       {/* Datasets Grid */}
       {loading ? (
-        <div className="flex justify-center items-center py-12">
-          <Loader className="animate-spin text-primary" size={32} />
+        <div className="flex flex-col justify-center items-center py-20">
+          <div className="relative w-20 h-20">
+            <Loader className="animate-spin text-purple-500" size={48} />
+          </div>
+          <p className="mt-4 text-lg text-gray-600 font-semibold">
+            Loading datasets...
+          </p>
         </div>
       ) : filteredDatasets.length === 0 ? (
-        <div className="text-center py-12">
-          <p className="text-xl text-gray-500">No datasets found</p>
-          <p className="text-sm text-gray-400 mt-2">
-            Be the first to list a dataset!
+        <div className="text-center py-16 bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl border-2 border-dashed border-purple-200">
+          <p className="text-2xl font-bold text-gray-700">No datasets found</p>
+          <p className="text-gray-600 mt-2 text-lg">
+            {searchTerm || selectedCategory !== "All"
+              ? "Try adjusting your search filters"
+              : "Be the first to list a dataset!"}
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fadeInScale">
           {filteredDatasets.map((dataset) => (
             <DatasetCard
               key={dataset.id}

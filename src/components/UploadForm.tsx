@@ -146,26 +146,33 @@ export function UploadForm({ onSuccess }: UploadFormProps) {
   const isLoading = uploading || listing || submitting;
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-8">
       {/* File Upload */}
-      <div className="space-y-2">
-        <label className="block font-medium">Dataset File</label>
+      <div className="space-y-3">
+        <label className="block font-bold text-lg text-gray-800">
+          📁 Dataset File *
+        </label>
         <div
           onDragEnter={handleDrag}
           onDragLeave={handleDrag}
           onDragOver={handleDrag}
           onDrop={handleDrop}
-          className={`border-2 border-dashed rounded-lg p-8 text-center transition ${
+          className={`border-3 border-dashed rounded-xl p-10 text-center transition-all duration-300 ${
             dragActive
-              ? "border-primary bg-primary bg-opacity-5"
-              : "border-gray-300"
+              ? "border-purple-500 bg-purple-50 scale-105"
+              : "border-purple-300 bg-purple-50/50 hover:bg-purple-50"
           }`}
         >
-          <Upload className="mx-auto mb-2 text-gray-400" size={32} />
-          <p className="font-medium mb-1">Drag and drop your file here</p>
-          <p className="text-sm text-gray-500 mb-4">or</p>
+          <Upload
+            className={`mx-auto mb-3 transition-colors ${dragActive ? "text-purple-600" : "text-purple-400"}`}
+            size={40}
+          />
+          <p className="font-bold text-gray-800 mb-1 text-lg">
+            Drag and drop your file here
+          </p>
+          <p className="text-sm text-gray-600 mb-4">or click to browse</p>
           <label className="inline-block">
-            <span className="px-4 py-2 bg-primary text-white rounded-lg cursor-pointer hover:bg-opacity-90">
+            <span className="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg cursor-pointer hover:from-purple-600 hover:to-pink-600 font-semibold transition-all hover:shadow-lg">
               Browse Files
             </span>
             <input
@@ -176,14 +183,21 @@ export function UploadForm({ onSuccess }: UploadFormProps) {
               accept="*/*"
             />
           </label>
-          {file && <p className="text-sm text-primary mt-3">✓ {file.name}</p>}
+          {file && (
+            <p className="text-sm text-purple-700 mt-4 font-semibold">
+              ✅ {file.name} ({(file.size / 1024 / 1024).toFixed(2)} MB)
+            </p>
+          )}
         </div>
       </div>
 
       {/* Title */}
-      <div className="space-y-2">
-        <label htmlFor="title" className="block font-medium">
-          Dataset Title *
+      <div className="space-y-3">
+        <label
+          htmlFor="title"
+          className="block font-bold text-lg text-gray-800"
+        >
+          📝 Dataset Title *
         </label>
         <input
           id="title"
@@ -194,14 +208,17 @@ export function UploadForm({ onSuccess }: UploadFormProps) {
           required
           disabled={isLoading}
           placeholder="e.g., Customer Demographics Dataset"
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent disabled:bg-gray-50"
+          className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent disabled:bg-gray-50 font-medium transition-all hover:border-purple-300"
         />
       </div>
 
       {/* Description */}
-      <div className="space-y-2">
-        <label htmlFor="description" className="block font-medium">
-          Description *
+      <div className="space-y-3">
+        <label
+          htmlFor="description"
+          className="block font-bold text-lg text-gray-800"
+        >
+          📄 Description *
         </label>
         <textarea
           id="description"
@@ -210,16 +227,19 @@ export function UploadForm({ onSuccess }: UploadFormProps) {
           onChange={handleInputChange}
           required
           disabled={isLoading}
-          placeholder="Describe your dataset..."
-          rows={4}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent disabled:bg-gray-50"
+          placeholder="Describe your dataset in detail. Include what data it contains, size, format, and any other relevant information..."
+          rows={5}
+          className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent disabled:bg-gray-50 font-medium transition-all hover:border-purple-300"
         />
       </div>
 
       {/* Category */}
-      <div className="space-y-2">
-        <label htmlFor="category" className="block font-medium">
-          Category *
+      <div className="space-y-3">
+        <label
+          htmlFor="category"
+          className="block font-bold text-lg text-gray-800"
+        >
+          🏷️ Category *
         </label>
         <select
           id="category"
@@ -227,7 +247,7 @@ export function UploadForm({ onSuccess }: UploadFormProps) {
           value={formData.category}
           onChange={handleInputChange}
           disabled={isLoading}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent disabled:bg-gray-50"
+          className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent disabled:bg-gray-50 font-medium transition-all hover:border-purple-300 bg-white"
         >
           {CATEGORIES.map((cat) => (
             <option key={cat} value={cat}>
@@ -238,29 +258,37 @@ export function UploadForm({ onSuccess }: UploadFormProps) {
       </div>
 
       {/* Price */}
-      <div className="space-y-2">
-        <label htmlFor="price" className="block font-medium">
-          Price (0G tokens) *
+      <div className="space-y-3">
+        <label
+          htmlFor="price"
+          className="block font-bold text-lg text-gray-800"
+        >
+          💰 Price (0G tokens) *
         </label>
-        <input
-          id="price"
-          type="number"
-          name="price"
-          value={formData.price}
-          onChange={handleInputChange}
-          required
-          disabled={isLoading}
-          placeholder="0.00"
-          step="0.01"
-          min="0"
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent disabled:bg-gray-50"
-        />
+        <div className="relative">
+          <input
+            id="price"
+            type="number"
+            name="price"
+            value={formData.price}
+            onChange={handleInputChange}
+            required
+            disabled={isLoading}
+            placeholder="0.00"
+            step="0.01"
+            min="0"
+            className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent disabled:bg-gray-50 font-medium transition-all hover:border-purple-300 pr-12"
+          />
+          <span className="absolute right-4 top-3 text-gray-600 font-bold">
+            0G
+          </span>
+        </div>
       </div>
 
       {/* Tags */}
-      <div className="space-y-2">
-        <label htmlFor="tags" className="block font-medium">
-          Tags (comma-separated)
+      <div className="space-y-3">
+        <label htmlFor="tags" className="block font-bold text-lg text-gray-800">
+          🏷️ Tags (comma-separated)
         </label>
         <input
           id="tags"
@@ -270,29 +298,38 @@ export function UploadForm({ onSuccess }: UploadFormProps) {
           onChange={handleInputChange}
           disabled={isLoading}
           placeholder="e.g., customer-data, analytics, 2024"
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent disabled:bg-gray-50"
+          className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent disabled:bg-gray-50 font-medium transition-all hover:border-purple-300"
         />
       </div>
 
       {/* Platform Fee Info */}
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 flex gap-3">
-        <AlertCircle size={20} className="text-blue-600 flex-shrink-0 mt-0.5" />
-        <div className="text-sm text-blue-800">
-          <p className="font-medium">Platform Fee</p>
-          <p>A 2.5% platform fee will be deducted from each sale.</p>
+      <div className="bg-gradient-to-r from-blue-50 to-cyan-50 border-2 border-blue-200 rounded-xl p-4 flex gap-3 shadow-md">
+        <AlertCircle
+          size={24}
+          className="text-blue-600 flex-shrink-0 mt-0.5 font-bold"
+        />
+        <div className="text-sm">
+          <p className="font-bold text-blue-900">⚠️ Platform Fee</p>
+          <p className="text-blue-800">
+            A 2.5% platform fee will be deducted from each sale.
+          </p>
         </div>
       </div>
 
       {/* Progress */}
       {uploading && (
-        <div className="space-y-2">
+        <div className="space-y-3 bg-purple-50 p-4 rounded-xl border-2 border-purple-200">
           <div className="flex justify-between text-sm">
-            <span className="font-medium">{progress.message}</span>
-            <span>{progress.progress}%</span>
+            <span className="font-bold text-purple-900">
+              {progress.message}
+            </span>
+            <span className="font-bold text-purple-600">
+              {progress.progress}%
+            </span>
           </div>
-          <div className="w-full bg-gray-200 rounded-full h-2">
+          <div className="w-full bg-purple-200 rounded-full h-3 overflow-hidden">
             <div
-              className="bg-primary h-2 rounded-full transition-all"
+              className="bg-gradient-to-r from-purple-500 to-pink-500 h-3 rounded-full transition-all duration-300"
               style={{ width: `${progress.progress}%` }}
             />
           </div>
@@ -303,9 +340,16 @@ export function UploadForm({ onSuccess }: UploadFormProps) {
       <button
         type="submit"
         disabled={isLoading || !file || !formData.title || !formData.price}
-        className="w-full px-4 py-3 bg-primary text-white rounded-lg font-medium hover:bg-opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition"
+        className="w-full px-6 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl font-bold text-lg hover:from-purple-700 hover:to-pink-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all hover:shadow-xl hover:scale-105 active:scale-95"
       >
-        {isLoading ? "Processing..." : "List Dataset"}
+        {isLoading ? (
+          <span className="flex items-center justify-center gap-2">
+            <span className="animate-spin">⏳</span>
+            Processing...
+          </span>
+        ) : (
+          "🚀 List Dataset"
+        )}
       </button>
     </form>
   );
