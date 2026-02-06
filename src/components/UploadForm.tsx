@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Upload, AlertCircle } from "lucide-react";
+import { Upload, AlertCircle, FileText, Tag, DollarSign, Loader } from "lucide-react";
 import { useZgStorage } from "@/hooks/useZgStorage";
 import { useMarketplace } from "@/hooks/useMarketplace";
 import { useWallet } from "@/hooks/useWallet";
@@ -101,18 +101,6 @@ export function UploadForm({ onSuccess }: UploadFormProps) {
         console.log("Upload progress:", progress);
       });
 
-      // Create metadata
-      // const metadata = {
-      //   title: formData.title,
-      //   description: formData.description,
-      //   category: formData.category,
-      //   fileSize: file.size,
-      //   format: file.name.split('.').pop() || 'unknown',
-      //   tags: formData.tags.split(',').map(t => t.trim()).filter(Boolean),
-      //   uploadDate: Math.floor(Date.now() / 1000),
-      //   ...(previewFile && { previewRootHash: 'placeholder' }),
-      // };
-
       // Create metadata JSON and upload it (in real app, upload this too)
       const metadataURI = `ipfs://placeholder-metadata-${Date.now()}`;
 
@@ -146,33 +134,34 @@ export function UploadForm({ onSuccess }: UploadFormProps) {
   const isLoading = uploading || listing || submitting;
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-8">
+    <form onSubmit={handleSubmit} className="space-y-6">
       {/* File Upload */}
       <div className="space-y-3">
-        <label className="block font-bold text-lg text-gray-800">
-          📁 Dataset File *
+        <label className="flex items-center gap-2 font-bold text-lg text-white">
+          <Upload size={20} className="text-indigo-400" />
+          Dataset File <span className="text-red-400">*</span>
         </label>
         <div
           onDragEnter={handleDrag}
           onDragLeave={handleDrag}
           onDragOver={handleDrag}
           onDrop={handleDrop}
-          className={`border-3 border-dashed rounded-xl p-10 text-center transition-all duration-300 ${
+          className={`border-2 border-dashed rounded-xl p-10 text-center transition-all duration-300 ${
             dragActive
-              ? "border-purple-500 bg-purple-50 scale-105"
-              : "border-purple-300 bg-purple-50/50 hover:bg-purple-50"
+              ? "border-indigo-500 bg-indigo-500/20 scale-[1.02]"
+              : "border-indigo-500/30 bg-slate-800/50 hover:bg-indigo-500/10 hover:border-indigo-500/50"
           }`}
         >
           <Upload
-            className={`mx-auto mb-3 transition-colors ${dragActive ? "text-purple-600" : "text-purple-400"}`}
+            className={`mx-auto mb-3 transition-colors ${dragActive ? "text-indigo-400" : "text-slate-500"}`}
             size={40}
           />
-          <p className="font-bold text-gray-800 mb-1 text-lg">
+          <p className="font-bold text-white mb-1 text-lg">
             Drag and drop your file here
           </p>
-          <p className="text-sm text-gray-600 mb-4">or click to browse</p>
+          <p className="text-sm text-slate-400 mb-4">or click to browse</p>
           <label className="inline-block">
-            <span className="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg cursor-pointer hover:from-purple-600 hover:to-pink-600 font-semibold transition-all hover:shadow-lg">
+            <span className="btn-primary cursor-pointer">
               Browse Files
             </span>
             <input
@@ -184,20 +173,21 @@ export function UploadForm({ onSuccess }: UploadFormProps) {
             />
           </label>
           {file && (
-            <p className="text-sm text-purple-700 mt-4 font-semibold">
-              ✅ {file.name} ({(file.size / 1024 / 1024).toFixed(2)} MB)
-            </p>
+            <div className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/20 border border-emerald-500/30 rounded-lg">
+              <FileText size={16} className="text-emerald-400" />
+              <span className="text-sm text-emerald-300 font-medium">
+                {file.name} ({(file.size / 1024 / 1024).toFixed(2)} MB)
+              </span>
+            </div>
           )}
         </div>
       </div>
 
       {/* Title */}
       <div className="space-y-3">
-        <label
-          htmlFor="title"
-          className="block font-bold text-lg text-gray-800"
-        >
-          📝 Dataset Title *
+        <label htmlFor="title" className="flex items-center gap-2 font-bold text-lg text-white">
+          <FileText size={20} className="text-indigo-400" />
+          Dataset Title <span className="text-red-400">*</span>
         </label>
         <input
           id="title"
@@ -208,17 +198,15 @@ export function UploadForm({ onSuccess }: UploadFormProps) {
           required
           disabled={isLoading}
           placeholder="e.g., Customer Demographics Dataset"
-          className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent disabled:bg-gray-50 font-medium transition-all hover:border-purple-300"
+          className="input-dark w-full"
         />
       </div>
 
       {/* Description */}
       <div className="space-y-3">
-        <label
-          htmlFor="description"
-          className="block font-bold text-lg text-gray-800"
-        >
-          📄 Description *
+        <label htmlFor="description" className="flex items-center gap-2 font-bold text-lg text-white">
+          <FileText size={20} className="text-indigo-400" />
+          Description <span className="text-red-400">*</span>
         </label>
         <textarea
           id="description"
@@ -227,19 +215,17 @@ export function UploadForm({ onSuccess }: UploadFormProps) {
           onChange={handleInputChange}
           required
           disabled={isLoading}
-          placeholder="Describe your dataset in detail. Include what data it contains, size, format, and any other relevant information..."
-          rows={5}
-          className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent disabled:bg-gray-50 font-medium transition-all hover:border-purple-300"
+          placeholder="Describe your dataset in detail..."
+          rows={4}
+          className="input-dark w-full resize-none"
         />
       </div>
 
       {/* Category */}
       <div className="space-y-3">
-        <label
-          htmlFor="category"
-          className="block font-bold text-lg text-gray-800"
-        >
-          🏷️ Category *
+        <label htmlFor="category" className="flex items-center gap-2 font-bold text-lg text-white">
+          <Tag size={20} className="text-indigo-400" />
+          Category <span className="text-red-400">*</span>
         </label>
         <select
           id="category"
@@ -247,7 +233,7 @@ export function UploadForm({ onSuccess }: UploadFormProps) {
           value={formData.category}
           onChange={handleInputChange}
           disabled={isLoading}
-          className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent disabled:bg-gray-50 font-medium transition-all hover:border-purple-300 bg-white"
+          className="input-dark w-full"
         >
           {CATEGORIES.map((cat) => (
             <option key={cat} value={cat}>
@@ -259,11 +245,9 @@ export function UploadForm({ onSuccess }: UploadFormProps) {
 
       {/* Price */}
       <div className="space-y-3">
-        <label
-          htmlFor="price"
-          className="block font-bold text-lg text-gray-800"
-        >
-          💰 Price (0G tokens) *
+        <label htmlFor="price" className="flex items-center gap-2 font-bold text-lg text-white">
+          <DollarSign size={20} className="text-indigo-400" />
+          Price (0G tokens) <span className="text-red-400">*</span>
         </label>
         <div className="relative">
           <input
@@ -277,9 +261,9 @@ export function UploadForm({ onSuccess }: UploadFormProps) {
             placeholder="0.00"
             step="0.01"
             min="0"
-            className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent disabled:bg-gray-50 font-medium transition-all hover:border-purple-300 pr-12"
+            className="input-dark w-full pr-12"
           />
-          <span className="absolute right-4 top-3 text-gray-600 font-bold">
+          <span className="absolute right-4 top-1/2 -translate-y-1/2 text-indigo-400 font-bold text-sm">
             0G
           </span>
         </div>
@@ -287,8 +271,9 @@ export function UploadForm({ onSuccess }: UploadFormProps) {
 
       {/* Tags */}
       <div className="space-y-3">
-        <label htmlFor="tags" className="block font-bold text-lg text-gray-800">
-          🏷️ Tags (comma-separated)
+        <label htmlFor="tags" className="flex items-center gap-2 font-bold text-lg text-white">
+          <Tag size={20} className="text-indigo-400" />
+          Tags (comma-separated)
         </label>
         <input
           id="tags"
@@ -298,19 +283,16 @@ export function UploadForm({ onSuccess }: UploadFormProps) {
           onChange={handleInputChange}
           disabled={isLoading}
           placeholder="e.g., customer-data, analytics, 2024"
-          className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent disabled:bg-gray-50 font-medium transition-all hover:border-purple-300"
+          className="input-dark w-full"
         />
       </div>
 
       {/* Platform Fee Info */}
-      <div className="bg-gradient-to-r from-blue-50 to-cyan-50 border-2 border-blue-200 rounded-xl p-4 flex gap-3 shadow-md">
-        <AlertCircle
-          size={24}
-          className="text-blue-600 flex-shrink-0 mt-0.5 font-bold"
-        />
+      <div className="glass-card-light p-4 flex gap-3">
+        <AlertCircle size={24} className="text-blue-400 flex-shrink-0 mt-0.5" />
         <div className="text-sm">
-          <p className="font-bold text-blue-900">⚠️ Platform Fee</p>
-          <p className="text-blue-800">
+          <p className="font-bold text-white">Platform Fee</p>
+          <p className="text-slate-400">
             A 2.5% platform fee will be deducted from each sale.
           </p>
         </div>
@@ -318,18 +300,14 @@ export function UploadForm({ onSuccess }: UploadFormProps) {
 
       {/* Progress */}
       {uploading && (
-        <div className="space-y-3 bg-purple-50 p-4 rounded-xl border-2 border-purple-200">
+        <div className="space-y-3 glass-card-light p-4">
           <div className="flex justify-between text-sm">
-            <span className="font-bold text-purple-900">
-              {progress.message}
-            </span>
-            <span className="font-bold text-purple-600">
-              {progress.progress}%
-            </span>
+            <span className="font-bold text-white">{progress.message}</span>
+            <span className="font-bold text-indigo-400">{progress.progress}%</span>
           </div>
-          <div className="w-full bg-purple-200 rounded-full h-3 overflow-hidden">
+          <div className="w-full bg-slate-700 rounded-full h-2 overflow-hidden">
             <div
-              className="bg-gradient-to-r from-purple-500 to-pink-500 h-3 rounded-full transition-all duration-300"
+              className="bg-gradient-to-r from-indigo-500 to-blue-500 h-2 rounded-full transition-all duration-300"
               style={{ width: `${progress.progress}%` }}
             />
           </div>
@@ -340,11 +318,11 @@ export function UploadForm({ onSuccess }: UploadFormProps) {
       <button
         type="submit"
         disabled={isLoading || !file || !formData.title || !formData.price}
-        className="w-full px-6 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl font-bold text-lg hover:from-purple-700 hover:to-pink-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all hover:shadow-xl hover:scale-105 active:scale-95"
+        className="btn-primary w-full py-4 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {isLoading ? (
           <span className="flex items-center justify-center gap-2">
-            <span className="animate-spin">⏳</span>
+            <Loader size={20} className="animate-spin" />
             Processing...
           </span>
         ) : (

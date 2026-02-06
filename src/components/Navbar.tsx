@@ -2,7 +2,7 @@
 
 import { useWallet } from "@/hooks/useWallet";
 import {
-  ShoppingCart,
+  Database,
   LogOut,
   Menu,
   X,
@@ -19,7 +19,6 @@ export function WalletConnect() {
   const wallet = useWallet();
   const [showError, setShowError] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -27,10 +26,7 @@ export function WalletConnect() {
 
   if (!mounted) {
     return (
-      <button
-        disabled
-        className="px-4 py-2 bg-gradient-to-r from-slate-200 to-slate-300 text-slate-600 rounded-xl opacity-60 cursor-not-allowed flex items-center gap-2 whitespace-nowrap font-medium shadow-sm"
-      >
+      <button disabled className="btn-secondary opacity-60 cursor-not-allowed flex items-center gap-2">
         <span className="animate-pulse">⏳</span>
         Loading...
       </button>
@@ -52,30 +48,22 @@ export function WalletConnect() {
         <button
           onClick={handleConnect}
           disabled={wallet.isLoading}
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-          className="relative px-6 py-3 bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 text-white rounded-xl font-bold hover:shadow-2xl hover:shadow-purple-500/50 transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed flex items-center gap-2 whitespace-nowrap overflow-hidden group"
+          className="btn-primary flex items-center gap-2 whitespace-nowrap"
         >
-          <div className="absolute inset-0 bg-gradient-to-r from-purple-700 via-pink-600 to-red-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-          <div className="relative flex items-center gap-2">
-            {wallet.isLoading ? (
-              <>
-                <Zap size={18} className="animate-spin" />
-                Connecting...
-              </>
-            ) : (
-              <>
-                <Wallet
-                  size={18}
-                  className="group-hover:scale-110 transition-transform"
-                />
-                Connect Wallet
-              </>
-            )}
-          </div>
+          {wallet.isLoading ? (
+            <>
+              <Zap size={18} className="animate-spin" />
+              Connecting...
+            </>
+          ) : (
+            <>
+              <Wallet size={18} />
+              Connect Wallet
+            </>
+          )}
         </button>
         {showError && wallet.error && (
-          <div className="flex items-center gap-2 text-xs text-red-700 bg-gradient-to-r from-red-50 to-orange-50 px-4 py-2 rounded-lg border border-red-200 shadow-sm animate-shake">
+          <div className="flex items-center gap-2 text-xs text-red-400 bg-red-500/10 px-4 py-2 rounded-lg border border-red-500/30">
             <AlertCircle size={16} className="flex-shrink-0" />
             <span>{wallet.error}</span>
           </div>
@@ -85,27 +73,20 @@ export function WalletConnect() {
   }
 
   return (
-    <div className="flex items-center gap-3 bg-gradient-to-r from-emerald-50 via-cyan-50 to-blue-50 px-5 py-3 rounded-xl border border-emerald-200 shadow-lg hover:shadow-xl transition-shadow duration-300 group">
-      <div className="flex items-center gap-2 animate-pulse">
-        <CheckCircle
-          size={20}
-          className="text-emerald-500 group-hover:text-emerald-600 transition-colors"
-        />
-      </div>
+    <div className="flex items-center gap-3 glass-card-light px-4 py-2">
+      <CheckCircle size={18} className="text-emerald-400" />
       <div className="text-right min-w-fit">
-        <p className="text-sm font-bold bg-gradient-to-r from-emerald-600 to-cyan-600 bg-clip-text text-transparent">
-          {wallet.displayAddress}
-        </p>
-        <p className="text-xs font-semibold text-cyan-600">
+        <p className="text-sm font-bold text-white">{wallet.displayAddress}</p>
+        <p className="text-xs text-indigo-300">
           {wallet.balance && formatPrice(BigInt(wallet.balance))} 0G
         </p>
       </div>
       <button
         onClick={wallet.disconnect}
-        className="p-2 text-gray-600 hover:bg-gradient-to-r hover:from-red-100 hover:to-orange-100 hover:text-red-600 rounded-lg transition-all duration-300 ml-2 hover:scale-110 hover:shadow-md group/btn"
+        className="p-2 text-slate-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all duration-300"
         title="Disconnect Wallet"
       >
-        <LogOut size={18} className="group-hover/btn:animate-bounce" />
+        <LogOut size={18} />
       </button>
     </div>
   );
@@ -140,47 +121,42 @@ export function Navbar() {
     <nav
       className={`sticky top-0 z-40 transition-all duration-500 ${
         scrolled
-          ? "bg-white/95 backdrop-blur-lg border-b-2 border-purple-200 shadow-2xl"
-          : "bg-gradient-to-b from-slate-50 via-white to-white border-b-2 border-purple-100 shadow-lg"
+          ? "glass-card border-b border-indigo-500/20 shadow-lg shadow-indigo-500/10"
+          : "bg-slate-900/80 backdrop-blur-md border-b border-slate-700/50"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
-          {/* Logo with Animation */}
+          {/* Logo */}
           <Link
             href="/"
             className="flex items-center gap-3 font-bold text-2xl hover:opacity-80 transition-all duration-300 group"
           >
-            <div className="p-2 bg-gradient-to-br from-purple-500 via-pink-500 to-red-500 rounded-xl group-hover:shadow-2xl group-hover:shadow-purple-500/50 transition-all duration-300 group-hover:scale-110 group-hover:rotate-6">
-              <ShoppingCart className="text-white" size={28} />
+            <div className="p-2.5 bg-gradient-to-br from-indigo-500 to-blue-600 rounded-xl group-hover:shadow-lg group-hover:shadow-indigo-500/50 transition-all duration-300 group-hover:scale-105">
+              <Database className="text-white" size={26} />
             </div>
             <div>
-              <span className="hidden sm:inline bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 bg-clip-text text-transparent font-black tracking-tight">
-                Dataset
+              <span className="hidden sm:block gradient-text-blue font-black text-xl tracking-tight">
+                Dataset Marketplace
               </span>
-              <div className="hidden sm:block text-xs font-bold text-transparent bg-gradient-to-r from-cyan-500 to-blue-500 bg-clip-text tracking-widest">
-                MARKETPLACE
-              </div>
-              <span className="sm:hidden text-sm bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-                DM
-              </span>
+              <span className="sm:hidden gradient-text-blue font-black">DM</span>
             </div>
           </Link>
 
           {/* Desktop Navigation Links */}
           <div className="hidden lg:flex items-center gap-8">
             {mounted &&
-              navLinks.map((link, idx) => {
+              navLinks.map((link) => {
                 const shouldShow = link.always || wallet.isConnected;
                 if (!shouldShow) return null;
                 return (
                   <Link
                     key={link.href}
                     href={link.href}
-                    className="relative text-gray-700 font-semibold text-lg hover:text-transparent hover:bg-gradient-to-r hover:from-purple-600 hover:to-pink-600 hover:bg-clip-text transition-all duration-300 group"
+                    className="relative text-slate-300 font-semibold hover:text-white transition-all duration-300 group py-2"
                   >
                     {link.label}
-                    <div className="absolute bottom-0 left-0 w-0 h-1 bg-gradient-to-r from-purple-500 to-pink-500 group-hover:w-full transition-all duration-500 rounded-full" />
+                    <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-indigo-500 to-blue-500 group-hover:w-full transition-all duration-300 rounded-full" />
                   </Link>
                 );
               })}
@@ -189,13 +165,9 @@ export function Navbar() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden p-2 hover:bg-gradient-to-r hover:from-purple-100 hover:to-pink-100 rounded-lg transition-all duration-300 hover:scale-110"
+            className="lg:hidden p-2 text-slate-300 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-300"
           >
-            {mobileMenuOpen ? (
-              <X size={24} className="text-purple-600" />
-            ) : (
-              <Menu size={24} className="text-purple-600" />
-            )}
+            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
 
           {/* Wallet Connect - Desktop */}
@@ -206,7 +178,7 @@ export function Navbar() {
 
         {/* Mobile Menu */}
         {mounted && mobileMenuOpen && (
-          <div className="lg:hidden mt-4 pb-4 border-t-2 border-purple-200 pt-4 space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
+          <div className="lg:hidden mt-4 pb-4 border-t border-slate-700 pt-4 space-y-2 animate-fade-in-up">
             {navLinks.map((link) => {
               const shouldShow = link.always || wallet.isConnected;
               if (!shouldShow) return null;
@@ -214,14 +186,14 @@ export function Navbar() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="block px-4 py-3 text-gray-700 font-semibold hover:bg-gradient-to-r hover:from-purple-100 hover:to-pink-100 hover:text-transparent hover:bg-clip-text rounded-lg transition-all duration-300 group border-l-4 border-transparent hover:border-purple-500"
+                  className="block px-4 py-3 text-slate-300 font-semibold hover:text-white hover:bg-indigo-500/20 rounded-lg transition-all duration-300"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   {link.label}
                 </Link>
               );
             })}
-            <div className="pt-3 border-t-2 border-purple-200">
+            <div className="pt-3 border-t border-slate-700">
               <WalletConnect />
             </div>
           </div>
