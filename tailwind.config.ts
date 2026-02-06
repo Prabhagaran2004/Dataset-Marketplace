@@ -9,8 +9,17 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        primary: "#6366f1",
-        secondary: "#8b5cf6",
+        dark: "#0A0F0D",
+        primary: "#10B981",
+        accent: "#22D3EE",
+        danger: "#EF4444",
+        "text-main": "#ECFDF5",
+        glass: "rgba(255,255,255,0.05)",
+      },
+      boxShadow: {
+        glow: "0 0 30px rgba(16,185,129,0.25)",
+        "glow-lg": "0 0 50px rgba(16,185,129,0.35)",
+        "glow-accent": "0 0 30px rgba(34,211,238,0.25)",
       },
       keyframes: {
         shake: {
@@ -19,8 +28,8 @@ const config: Config = {
           "20%, 40%, 60%, 80%": { transform: "translateX(2px)" },
         },
         glow: {
-          "0%, 100%": { boxShadow: "0 0 20px rgba(168, 85, 247, 0.5)" },
-          "50%": { boxShadow: "0 0 30px rgba(168, 85, 247, 0.8)" },
+          "0%, 100%": { boxShadow: "0 0 20px rgba(16,185,129,0.3)" },
+          "50%": { boxShadow: "0 0 40px rgba(16,185,129,0.6)" },
         },
         slideInUp: {
           "0%": { transform: "translateY(20px)", opacity: "0" },

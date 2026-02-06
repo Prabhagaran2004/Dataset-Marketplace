@@ -77,13 +77,13 @@ export function WalletConnect() {
       <CheckCircle size={18} className="text-emerald-400" />
       <div className="text-right min-w-fit">
         <p className="text-sm font-bold text-white">{wallet.displayAddress}</p>
-        <p className="text-xs text-indigo-300">
+        <p className="text-xs text-emerald-300">
           {wallet.balance && formatPrice(BigInt(wallet.balance))} 0G
         </p>
       </div>
       <button
         onClick={wallet.disconnect}
-        className="p-2 text-slate-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all duration-300"
+        className="p-2 text-emerald-200/30 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all duration-300"
         title="Disconnect Wallet"
       >
         <LogOut size={18} />
@@ -121,25 +121,25 @@ export function Navbar() {
     <nav
       className={`sticky top-0 z-40 transition-all duration-500 ${
         scrolled
-          ? "glass-card border-b border-indigo-500/20 shadow-lg shadow-indigo-500/10"
-          : "bg-slate-900/80 backdrop-blur-md border-b border-slate-700/50"
+          ? "glass-card border-b border-emerald-500/20 shadow-lg shadow-emerald-500/10"
+          : "bg-[#0A0F0D]/90 backdrop-blur-md border-b border-emerald-500/10"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 py-4">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link
             href="/"
             className="flex items-center gap-3 font-bold text-2xl hover:opacity-80 transition-all duration-300 group"
           >
-            <div className="p-2.5 bg-gradient-to-br from-indigo-500 to-blue-600 rounded-xl group-hover:shadow-lg group-hover:shadow-indigo-500/50 transition-all duration-300 group-hover:scale-105">
+            <div className="p-2.5 bg-gradient-to-br from-emerald-500 to-cyan-500 rounded-xl group-hover:shadow-lg group-hover:shadow-emerald-500/50 transition-all duration-300 group-hover:scale-105">
               <Database className="text-white" size={26} />
             </div>
             <div>
-              <span className="hidden sm:block gradient-text-blue font-black text-xl tracking-tight">
+              <span className="hidden sm:block gradient-text font-black text-xl tracking-tight">
                 Dataset Marketplace
               </span>
-              <span className="sm:hidden gradient-text-blue font-black">DM</span>
+              <span className="sm:hidden gradient-text font-black">DM</span>
             </div>
           </Link>
 
@@ -153,10 +153,10 @@ export function Navbar() {
                   <Link
                     key={link.href}
                     href={link.href}
-                    className="relative text-slate-300 font-semibold hover:text-white transition-all duration-300 group py-2"
+                    className="relative text-emerald-100/70 font-semibold hover:text-white transition-all duration-300 group py-2"
                   >
                     {link.label}
-                    <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-indigo-500 to-blue-500 group-hover:w-full transition-all duration-300 rounded-full" />
+                    <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-emerald-500 to-cyan-400 group-hover:w-full transition-all duration-300 rounded-full" />
                   </Link>
                 );
               })}
@@ -165,7 +165,7 @@ export function Navbar() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden p-2 text-slate-300 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-300"
+            className="lg:hidden p-2 text-emerald-100/70 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-300"
           >
             {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -178,7 +178,7 @@ export function Navbar() {
 
         {/* Mobile Menu */}
         {mounted && mobileMenuOpen && (
-          <div className="lg:hidden mt-4 pb-4 border-t border-slate-700 pt-4 space-y-2 animate-fade-in-up">
+          <div className="lg:hidden mt-4 pb-4 border-t border-emerald-500/10 pt-4 space-y-2 animate-fade-in-up">
             {navLinks.map((link) => {
               const shouldShow = link.always || wallet.isConnected;
               if (!shouldShow) return null;
@@ -186,14 +186,14 @@ export function Navbar() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="block px-4 py-3 text-slate-300 font-semibold hover:text-white hover:bg-indigo-500/20 rounded-lg transition-all duration-300"
+                  className="block px-4 py-3 text-emerald-100/70 font-semibold hover:text-white hover:bg-emerald-500/20 rounded-lg transition-all duration-300"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   {link.label}
                 </Link>
               );
             })}
-            <div className="pt-3 border-t border-slate-700">
+            <div className="pt-3 border-t border-emerald-500/10">
               <WalletConnect />
             </div>
           </div>
